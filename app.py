@@ -2,19 +2,10 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# =========================================================
-# PAGE CONFIGURATION
-# =========================================================
-
 st.set_page_config(
     page_title="EV Driving Pattern Monitoring System",
     layout="wide"
 )
-
-# =========================================================
-# PROJECT TITLE
-# =========================================================
-
 st.title("🚗 AI-Based Driving Pattern Monitoring & Range Estimation System")
 
 st.markdown("""
@@ -31,10 +22,6 @@ The system monitors:
 """)
 
 st.markdown("---")
-
-# =========================================================
-# SIDEBAR : DRIVER INPUT
-# =========================================================
 
 st.sidebar.header("⚙️ Driver Control Panel")
 
@@ -53,10 +40,6 @@ Increasing throttle increases:
 - Current Consumption
 - Power Usage
 """)
-
-# =========================================================
-# SIMULATED SENSOR PARAMETERS
-# =========================================================
 
 # Simulated speed calculation
 speed = throttle * 0.8
@@ -82,10 +65,6 @@ else:
 # Battery Percentage Simulation
 battery_percentage = max(100 - (current * 2), 5)
 
-# =========================================================
-# AI-BASED DRIVING PATTERN CLASSIFICATION
-# =========================================================
-
 if throttle < 30:
     driving_pattern = "Eco Driving"
     feedback = "Efficient driving behaviour detected."
@@ -100,10 +79,6 @@ else:
     driving_pattern = "Aggressive Driving"
     feedback = "High energy consumption detected!"
     status = "error"
-
-# =========================================================
-# REAL-TIME VEHICLE PARAMETERS
-# =========================================================
 
 st.header("📊 Real-Time Vehicle Parameters")
 
@@ -131,10 +106,6 @@ col4.metric(
 
 st.markdown("---")
 
-# =========================================================
-# BATTERY MONITORING SECTION
-# =========================================================
-
 st.header("🔋 Battery Monitoring")
 
 st.write("### Remaining Battery Percentage")
@@ -149,10 +120,6 @@ Aggressive driving results in faster battery discharge.
 """)
 
 st.markdown("---")
-
-# =========================================================
-# AI DRIVING PATTERN DETECTION
-# =========================================================
 
 st.header("🧠 AI Driving Pattern Detection")
 
@@ -177,10 +144,6 @@ The AI system classifies driving behaviour based on:
 """)
 
 st.markdown("---")
-
-# =========================================================
-# ENERGY ANALYSIS GRAPH
-# =========================================================
 
 st.header("📈 Energy Consumption Analysis")
 
@@ -213,10 +176,6 @@ Higher speed generally increases energy usage and reduces EV range.
 
 st.markdown("---")
 
-# =========================================================
-# SYSTEM WORKFLOW
-# =========================================================
-
 st.header("⚙️ System Workflow")
 
 st.code("""
@@ -232,10 +191,6 @@ Energy Consumption Estimation
           ↓
 Remaining EV Range Prediction
 """)
-
-# =========================================================
-# TECHNOLOGIES USED
-# =========================================================
 
 st.header("🛠️ Technologies Used")
 
@@ -262,10 +217,6 @@ st.table(tech_df)
 
 st.markdown("---")
 
-# =========================================================
-# PROJECT CONCLUSION
-# =========================================================
-
 st.header("📌 Project Conclusion")
 
 st.write("""
@@ -281,9 +232,5 @@ The system promotes:
 """)
 
 st.markdown("---")
-
-# =========================================================
-# FOOTER
-# =========================================================
 
 st.caption("Final Year B.Tech Project | Department of Electrical Engineering")
