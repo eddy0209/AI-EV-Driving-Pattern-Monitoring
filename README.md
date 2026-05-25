@@ -8,152 +8,112 @@
 
 ---
 
-# 📌 Project Overview
+## 📌 Project Overview
 
-This project focuses on developing an **AI-based driving pattern monitoring and EV range estimation system** capable of analyzing driver behaviour and estimating energy consumption in electric vehicles.
+This project focuses on developing an intelligent Electric Vehicle (EV) monitoring and optimization system using Artificial Intelligence and Embedded Systems.
 
-The system simulates an Electric Vehicle (EV) environment where driving parameters are monitored in real-time and processed using Artificial Intelligence techniques to classify driving behaviour into:
-
-- 🟢 Eco Driving
-- 🟡 Normal Driving
-- 🔴 Aggressive Driving
-
-Based on these driving patterns, the system estimates:
-- ⚡ Energy Consumption
-- 🔋 Battery Usage
-- 🚘 Remaining Driving Range
+The system analyzes driving behaviour in real time and dynamically optimizes energy consumption to improve battery efficiency and driving range.
 
 ---
 
-# 🎯 Objectives
+## 🎯 Objectives
 
-✅ Monitor driving behaviour in real-time  
-✅ Simulate EV energy consumption  
-✅ Classify driving patterns using AI/ML  
-✅ Estimate remaining vehicle range  
-✅ Promote energy-efficient driving habits  
-✅ Integrate Embedded Systems with AI concepts  
-
----
-
-# 🧠 Core Technologies Used
-
-| Technology | Purpose |
-|---|---|
-| Python | Main Programming |
-| Streamlit | Interactive Dashboard |
-| Machine Learning | Driving Pattern Classification |
-| ESP32 | Data Acquisition (Planned Hardware) |
-| Raspberry Pi | ML Processing (Planned Hardware) |
-| Pandas & NumPy | Data Processing |
-| Matplotlib | Data Visualization |
+* Monitor driving behaviour
+* Detect Eco / Normal / Aggressive driving patterns
+* Analyze energy consumption
+* Optimize motor power usage using PWM
+* Improve EV battery efficiency
+* Enhance driving range dynamically
 
 ---
 
-# ⚙️ System Workflow
+## ⚙️ Technologies Used
 
-```text
-Driver Input (Throttle)
-          ↓
-Sensor Data Generation
-          ↓
-Driving Parameter Monitoring
-          ↓
-AI-Based Driving Pattern Detection
-          ↓
-Energy Consumption Estimation
-          ↓
-Remaining Range Prediction
-```
+### Software
 
----
+* Python
+* Streamlit
+* Machine Learning
+* Arduino IDE
+* Matplotlib
 
-# 📊 Features
+### Hardware
 
-✨ Interactive EV Dashboard  
-✨ Real-time Driving Pattern Classification  
-✨ Energy Consumption Monitoring  
-✨ Battery Status Indicator  
-✨ Driver Feedback System  
-✨ Dynamic Range Estimation  
-✨ Live Graph Visualization  
+* ESP32
+* Raspberry Pi
+* ACS712 Current Sensor
+* Voltage Sensor
+* Rotary Encoder
+* Potentiometer
+* LCD Display
+* BLDC/DC Motor
 
 ---
 
-# 🖥️ Dashboard Preview
+## 🔄 System Workflow
 
-The dashboard simulates:
-- Speed Monitoring
-- Current Consumption
-- AI Driving Classification
-- Battery Percentage
-- Estimated EV Range
-- Driver Feedback Alerts
-
----
-
-# 🔍 Driving Pattern Logic
-
-| Driving Style | Condition |
-|---|---|
-| Eco | Low throttle & smooth driving |
-| Normal | Moderate acceleration |
-| Aggressive | High throttle & rapid acceleration |
+Throttle Input
+↓
+Sensor Data Acquisition
+↓
+AI Driving Pattern Detection
+↓
+Power Consumption Analysis
+↓
+PWM Optimization
+↓
+Battery Efficiency Improvement
+↓
+Optimized EV Range
 
 ---
 
-# 🔋 Range Estimation Formula
+## 🧠 Key Features
 
-```text
-Range = Battery Capacity (Wh) / Energy Consumption (Wh/km)
-```
-
-The system dynamically estimates remaining EV range based on simulated driving conditions and power usage.
-
----
-
-# 📁 Project Structure
-
-```text
-EV_AI_Project/
-│
-├── app.py
-├── README.md
-├── dataset/
-├── ml_model/
-├── hardware_docs/
-└── presentation/
-```
+* AI-Based Driving Pattern Detection
+* Real-Time Energy Monitoring
+* PWM-Based Motor Optimization
+* Battery Efficiency Analysis
+* Streamlit Dashboard Simulation
+* Tinkercad Hardware Prototype
+* LCD Optimization Display
 
 ---
 
-# 🚀 How to Run the Project
+## 📊 Dashboard Features
 
-## 1️⃣ Install Dependencies
-
-```bash
-pip install streamlit pandas matplotlib scikit-learn
-```
-
-## 2️⃣ Run Streamlit App
-
-```bash
-streamlit run app.py
-```
+* Speed Monitoring
+* Current Consumption
+* Battery Monitoring
+* Optimization Status
+* PWM Control
+* Power Saving Analysis
+* Energy Consumption Graphs
 
 ---
 
-# 📚 Future Scope
+## 🔌 Hardware Simulation
 
-🔹 Real-time hardware integration using ESP32  
-🔹 Deployment on Raspberry Pi  
-🔹 Real EV sensor integration  
-🔹 Advanced Machine Learning models  
-🔹 Cloud-based telemetry monitoring  
-🔹 Mobile App Integration  
+A basic embedded system prototype has been simulated using Tinkercad with:
+
+* Arduino Uno
+* Potentiometer
+* L293D Motor Driver
+* DC Motor
+* LCD 16x2
 
 ---
 
+## 🚀 Future Scope
+
+* Real-Time Hardware Integration
+* Advanced Machine Learning Models
+* IoT-Based Monitoring
+* Mobile App Integration
+* Smart Battery Management
+* GPS-Based Optimization
+
+---
 # 👨‍💻 Team Members
 
 - Anurati Bhaduri
@@ -164,34 +124,10 @@ streamlit run app.py
 
 ---
 
-# 🎓 Academic Information
+## 👨‍💻 Project Type
 
-**Final Year B.Tech Project**  
-Department of Electrical Engineering  
-Academy of Technology  
-
----
-
-# ⭐ Conclusion
-
-This project demonstrates how Artificial Intelligence and Embedded Systems can be combined to develop intelligent EV monitoring systems capable of analyzing driving behaviour and estimating vehicle range in real time.
-
-The project provides practical exposure to:
-- Electric Vehicle Technology
-- Embedded Systems
-- Machine Learning
-- Power Electronics
-- Real-Time Monitoring Systems
-
----
-
-# 🌟 Repository Highlights
-
-✅ AI + EV Integration  
-✅ Interactive Simulation  
-✅ Real-Time Dashboard  
-✅ Final Year Engineering Project  
-✅ Streamlit-Based Visualization  
+Final Year B.Tech Project
+Department of Electrical Engineering
 
 ---
 
