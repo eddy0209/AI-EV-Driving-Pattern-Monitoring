@@ -172,20 +172,61 @@ class EVPowerOptimizer:
                 optimization_enabled=True,
             )
 
-            target_power_kw = min(requested_power_kw, power_limit_kw)
+            # --------------------------------------------------------
+            # ZERO THROTTLE
+            # --------------------------------------------------------
+            # When the driver releases the accelerator, remove
+            # positive motor/traction power immediately.
+            #
+            # This allows the vehicle model to decelerate naturally,
+            # which can then trigger regenerative braking.
+            if throttle_pct <= 0.0:
 
-            # Ramp limiter prevents a sudden jump in motor power.
-            max_step = max(0.0, cfg.max_power_ramp_kw_per_step)
-            upper = self.previous_power_kw + max_step
-            lower = max(0.0, self.previous_power_kw - max_step)
+                optimized_power_kw = 0.0
+                ramp_limited = False
 
-            optimized_power_kw = self._clamp(target_power_kw, lower, upper)
-            optimized_power_kw = min(optimized_power_kw, power_limit_kw)
+            else:
 
-            ramp_limited = abs(optimized_power_kw - target_power_kw) > 1e-9
+                # ----------------------------------------------------
+                # NORMAL POSITIVE POWER CONTROL
+                # ----------------------------------------------------
 
-            if ramp_limited and status == "NORMAL":
-                status = "POWER_RAMP_LIMIT"
+                target_power_kw = min(
+                    requested_power_kw,
+                    power_limit_kw
+                )
+
+                # Ramp limiter prevents sudden increases/decreases
+                # during normal positive throttle operation.
+                max_step = max(
+                    0.0,
+                    cfg.max_power_ramp_kw_per_step
+                )
+
+                upper = self.previous_power_kw + max_step
+                lower = max(
+                    0.0,
+                    self.previous_power_kw - max_step
+                )
+
+                optimized_power_kw = self._clamp(
+                    target_power_kw,
+                    lower,
+                    upper
+                )
+
+                optimized_power_kw = min(
+                    optimized_power_kw,
+                    power_limit_kw
+                )
+
+                ramp_limited = (
+                        abs(optimized_power_kw - target_power_kw)
+                        > 1e-9
+                )
+
+                if ramp_limited and status == "NORMAL":
+                    status = "POWER_RAMP_LIMIT"
 
         self.previous_power_kw = optimized_power_kw
 

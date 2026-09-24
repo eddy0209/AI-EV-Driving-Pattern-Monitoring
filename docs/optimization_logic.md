@@ -1,110 +1,235 @@
-# Optimization Logic
+EV Optimization Logic
 
-## Objective of Optimization
+1. Purpose
 
-The main objective is to optimize:
+The optimization module controls how much motor power the EV requests and applies operating limits before the power is passed to the vehicle dynamics model.
 
-* Energy Consumption
-* Motor Power Usage
-* Current Consumption
-* Battery Efficiency
+The optimizer does not directly calculate remaining range or battery SOC. Its role is to make the requested motor power safer and more energy-aware based on throttle, SOC, battery temperature, motor limits, and ramp limits.
 
-to improve EV performance and driving range.
+2. Input
 
----
+The optimizer receives:
 
-## Why Optimization Is Needed
+throttle_pct — driver throttle command, 0–100%
 
-Aggressive driving causes:
+speed_kmh — current vehicle speed
 
-* High current draw
-* Rapid battery discharge
-* Increased power consumption
-* Reduced EV range
+acceleration_mps2 — current acceleration
 
-Therefore optimization is required to minimize unnecessary energy wastage.
+soc_percent — current battery SOC
 
----
+battery_temp_c — current battery temperature
 
-## Optimization Strategy
+optimization_enabled — whether optimization is enabled
 
-The system continuously monitors:
+The current speed and acceleration are available for future optimization rules and monitoring, while the main power decision is based on throttle and system limits.
 
-* Throttle Input
-* Speed
-* Current Consumption
-* Power Usage
+3. Requested Motor Power
 
-The AI model then detects driving behaviour.
+The throttle command is converted into requested motor power.
 
----
+Throttle %
+     ↓
+Requested motor power
 
-## Driving Pattern Classification
+The requested power is limited by the motor's configured maximum/rated power.
 
-### Eco Driving
+Conceptually:
 
-* Low throttle
-* Smooth acceleration
-* Efficient power usage
+requested_power = throttle_fraction × motor_power_limit
 
-Optimization:
+where:
 
-* Full PWM allowed
-* Maximum efficiency
+throttle_fraction = throttle_pct / 100
 
----
+4. Power Limiting Logic
 
-### Normal Driving
+The optimizer applies several limits.
 
-* Moderate acceleration
-* Average current consumption
+4.1 Motor Power Limit
 
-Optimization:
+The requested power cannot exceed the configured maximum motor power.
 
-* Moderate PWM optimization
-* Controlled power usage
+requested power ≤ maximum motor power
 
----
+4.2 Power Ramp Limit
 
-### Aggressive Driving
+The power cannot change too quickly between simulation steps.
 
-* High throttle
-* Sudden acceleration
-* High current spikes
+This prevents unrealistic instantaneous jumps in motor power.
 
-Optimization:
+previous optimized power
+            ↓
+      ramp limitation
+            ↓
+new optimized power
 
-* PWM reduced dynamically
-* Power consumption minimized
-* Battery efficiency improved
+The default ramp limit is:
 
----
+0.20 kW per simulation step
 
-## PWM Optimization
+4.3 Low SOC Limiting
 
-PWM (Pulse Width Modulation) is used to control motor power.
+The optimizer reduces available motor power when the battery SOC becomes low.
 
-Example:
+SOC ≤ 20%
 
-Normal PWM:
-90%
+Maximum available power is limited to approximately:
 
-Optimized PWM:
-70%
+60% of maximum motor power
 
-This reduces:
+SOC ≤ 10%
 
-* Motor power usage
-* Current consumption
-* Battery drain
+Maximum available power is limited further to approximately:
 
----
+35% of maximum motor power
 
-## Final Optimization Result
+This protects the battery and allows the vehicle to continue operating at low SOC.
 
-The optimization system improves:
+4.4 Battery Temperature Limiting
 
-* Battery efficiency
-* Energy management
-* Driving range
-* EV performance
+Motor power is also reduced when battery temperature becomes high.
+
+Battery temperature ≥ 45°C
+
+Maximum power is limited to approximately:
+
+70% of maximum motor power
+
+Battery temperature ≥ 50°C
+
+Maximum power is limited to approximately:
+
+40% of maximum motor power
+
+This prevents continued high-power operation under thermal stress.
+
+4.5 High-Throttle Eco Limiting
+
+When throttle is very high:
+
+Throttle ≥ 80%
+
+the optimizer can apply an eco power cap of approximately:
+
+70% of maximum motor power
+
+This prevents unnecessary continuous high-power demand when optimization is enabled.
+
+5. Optimization ON/OFF
+
+The system supports an optimization switch.
+
+Optimization ON
+
+The optimizer applies:
+
+motor power limits
+
+SOC limits
+
+thermal limits
+
+power ramp limiting
+
+high-throttle eco limiting
+
+Optimization OFF
+
+The requested throttle power is allowed to pass through subject to the fundamental motor power limit.
+
+This allows the dashboard to demonstrate the difference between normal operation and optimized operation.
+
+6. Priority of Limits
+
+The effective power limit is the most restrictive applicable limit.
+
+Conceptually:
+
+Motor limit
+     ↓
+SOC limit
+     ↓
+Temperature limit
+     ↓
+Eco limit
+     ↓
+Ramp limit
+     ↓
+Final optimized motor power
+
+The final optimized power must never exceed the active system limit.
+
+7. Optimization Result
+
+The optimizer returns:
+
+throttle_pct
+
+requested_power_kw
+
+optimized_power_kw
+
+power_limit_kw
+
+ramp_limited
+
+soc_limited
+
+thermal_limited
+
+optimization_active
+
+status
+
+These values are passed to the rest of the simulation and displayed on the dashboard.
+
+8. Interaction With Other Modules
+
+The optimizer is one stage in the complete simulation pipeline.
+
+Throttle
+   ↓
+Optimizer
+   ↓
+Optimized Motor Power
+   ↓
+Vehicle Model
+   ↓
+Speed + Acceleration + RPM
+   ↓
+Regen Controller
+   ↓
+Energy Model
+   ↓
+SOC + Battery Power + Energy
+   ↓
+ML Model
+   ↓
+Predicted Wh/km
+   ↓
+Range Model
+   ↓
+Remaining Range
+
+The optimizer therefore affects energy consumption indirectly by controlling motor power.
+
+9. Important Design Boundary
+
+The optimizer does not perform:
+
+battery SOC calculation
+
+battery current calculation
+
+energy consumption calculation
+
+regenerative braking calculation
+
+ML prediction
+
+remaining-range calculation
+
+Those responsibilities belong to their respective modules.
+
+This separation keeps the project modular and makes the system easier to test and explain.
